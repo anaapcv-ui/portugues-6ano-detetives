@@ -1,0 +1,269 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>🗂️ Resumo — Detetives das Palavras | Português 6º ano</title>
+<style>
+  :root{
+    --det:#4f46e5; --det-esc:#3730a3; --det-claro:#c7d2fe;
+    --ouro:#f59e0b; --ouro-claro:#fef3c7;
+    --pista:#e11d48; --pista-claro:#fecdd3;
+    --tinta:#312e81; --tinta2:#5b5b8a; --papel:#f6f1e4; --branco:#ffffff;
+    --verde-ok:#16a34a;
+  }
+  *{box-sizing:border-box;margin:0;padding:0;}
+  body{font-family:'Segoe UI',Tahoma,sans-serif;background:var(--papel);color:var(--tinta);line-height:1.6;padding:16px;font-size:17px;}
+  .container{max-width:880px;margin:0 auto;}
+  .topo{background:linear-gradient(135deg,#4f46e5,#3730a3 55%,#1e1b4b);border-radius:18px;padding:30px 26px;color:#fff;text-align:center;box-shadow:0 8px 24px rgba(55,48,163,.3);margin-bottom:18px;}
+  .topo h1{font-size:1.7em;margin-bottom:6px;}
+  .topo .sub{opacity:.95;}
+  .topo .narr{margin-top:12px;font-style:italic;font-size:.92em;border-top:1px dashed rgba(255,255,255,.4);padding-top:10px;color:#e0e7ff;}
+
+  .painel{background:var(--branco);border:1.5px solid var(--det-claro);border-radius:12px;padding:12px 16px;margin-bottom:16px;display:flex;flex-wrap:wrap;gap:8px;align-items:center;justify-content:space-between;}
+  .painel .salvo{font-size:.82em;color:var(--tinta2);}
+  .painel button{border:none;border-radius:8px;padding:7px 12px;font-size:.8em;font-weight:700;cursor:pointer;color:#fff;}
+  .b-exp{background:var(--det);} .b-imp{background:var(--ouro);} .b-zerar{background:var(--pista);}
+
+  .nav{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:18px;}
+  .nav a{background:var(--branco);border:2px solid var(--det-claro);color:var(--det-esc);text-decoration:none;padding:8px 14px;border-radius:20px;font-size:.85em;font-weight:700;}
+  .nav a:hover{background:var(--det);color:#fff;}
+
+  .secao{background:var(--branco);border-radius:16px;padding:22px;margin-bottom:20px;box-shadow:0 3px 10px rgba(0,0,0,.05);border-top:6px solid var(--det);}
+  .secao h2{color:var(--det-esc);font-size:1.3em;margin-bottom:6px;display:flex;align-items:center;gap:10px;flex-wrap:wrap;}
+  .secao .ref{font-size:.72em;color:var(--tinta2);background:#f1f0e8;padding:2px 10px;border-radius:10px;font-weight:600;}
+  .secao>p{margin:10px 0;}
+  b,strong{color:var(--det-esc);}
+
+  .cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:12px;margin:14px 0;}
+  .ficha{background:#eef2ff;border:1.5px solid var(--det-claro);border-radius:12px;padding:14px;}
+  .ficha .ft{font-weight:800;color:var(--det-esc);margin-bottom:6px;font-size:1.02em;}
+  .ficha .ex{font-style:italic;color:var(--tinta2);font-size:.92em;margin-top:6px;}
+
+  .postit{background:var(--ouro-claro);border:1px solid var(--ouro);border-radius:8px;padding:12px 14px;margin:12px 0;box-shadow:2px 2px 6px rgba(0,0,0,.08);}
+  .postit b{color:#b45309;}
+  .pegadinha{background:#fff1f2;border:2px solid var(--pista);border-radius:10px;padding:12px 14px;margin:12px 0;}
+  .pegadinha b{color:var(--pista);}
+
+  .flips{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:12px;margin:14px 0;}
+  .flip{background:transparent;height:160px;perspective:1000px;cursor:pointer;}
+  .flip-in{position:relative;width:100%;height:100%;transition:transform .5s;transform-style:preserve-3d;}
+  .flip.viro .flip-in{transform:rotateY(180deg);}
+  .flip-face{position:absolute;width:100%;height:100%;backface-visibility:hidden;border-radius:12px;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:14px;}
+  .flip-frente{background:linear-gradient(135deg,#4f46e5,#3730a3);color:#fff;}
+  .flip-frente .fc-t{font-weight:800;font-size:1.05em;}
+  .flip-frente .fc-d{font-size:.78em;opacity:.85;margin-top:8px;}
+  .flip-verso{background:#fffbeb;border:2px solid var(--ouro);color:var(--tinta);transform:rotateY(180deg);font-size:.9em;}
+
+  .tabela{width:100%;border-collapse:collapse;margin:12px 0;font-size:.9em;}
+  .tabela th{background:var(--det);color:#fff;padding:8px;text-align:left;}
+  .tabela td{border:1px solid #d8d4c4;padding:8px;}
+  .tabela tr:nth-child(even){background:#eef2ff;}
+
+  .glossario dt{font-weight:800;color:var(--det-esc);margin-top:8px;}
+  .glossario dd{margin-left:0;color:var(--tinta);}
+
+  .notas{margin-top:14px;}
+  .notas label{font-weight:700;color:var(--det-esc);font-size:.9em;}
+  .notas textarea{width:100%;min-height:60px;border:1.5px solid var(--det-claro);border-radius:8px;padding:8px;font-family:inherit;margin-top:6px;resize:vertical;}
+  .estudei{margin-top:10px;display:inline-flex;align-items:center;gap:8px;font-weight:700;color:var(--verde-ok);cursor:pointer;font-size:.9em;}
+  .estudei input{width:20px;height:20px;}
+  .rodape{text-align:center;color:var(--det-esc);font-style:italic;padding:16px;}
+  @media(max-width:600px){.topo h1{font-size:1.3em;}body{font-size:16px;}}
+</style>
+</head>
+<body>
+<div class="container">
+
+  <div class="topo">
+    <h1>🗂️ Arquivo de Casos — Detetives das Palavras</h1>
+    <div class="sub">Português · 6º ano · Colégio Coração Feliz</div>
+    <div class="narr">Aqui estão as 7 fichas de investigação do detetive. Tem flip card (clique para virar), post-it de dica, alerta de armadilha, tabela e glossário. Marque "✓ Estudei" ao terminar cada ficha. 🔍</div>
+  </div>
+
+  <div class="painel">
+    <div class="salvo" id="salvoInfo">💾 Progresso salvo sozinho neste navegador.</div>
+    <div>
+      <button class="b-exp" onclick="exportar()">📥 Exportar</button>
+      <button class="b-imp" onclick="document.getElementById('arq').click()">📤 Importar</button>
+      <button class="b-zerar" onclick="zerar()">🗑️ Zerar</button>
+      <input type="file" id="arq" accept=".json" style="display:none" onchange="importar(event)">
+    </div>
+  </div>
+
+  <div class="nav">
+    <a href="#e1">1 · Fato x Opinião</a>
+    <a href="#e2">2 · Descrição</a>
+    <a href="#e3">3 · Artigo</a>
+    <a href="#e4">4 · Onde x Aonde</a>
+    <a href="#e5">5 · Pronome</a>
+    <a href="#e6">6 · Possessivos</a>
+    <a href="#e7">7 · Demonstrativos</a>
+    <a href="#glo">📖 Glossário</a>
+  </div>
+
+  <!-- FICHA 1 -->
+  <div class="secao" id="e1">
+    <h2>🔍 Ficha 1 — Fato x Opinião <span class="ref">p. 159</span></h2>
+    <p>O <b>fato</b> é o retrato do que aconteceu de verdade e <b>não depende</b> de quem conta — qualquer um pode conferir. A <b>opinião</b> é o ponto de vista pessoal de alguém sobre um fato.</p>
+    <div class="cards">
+      <div class="ficha"><div class="ft">✅ Fato</div>Aconteceu de verdade, dá para conferir ou provar.<div class="ex">"A prova será na sexta-feira."</div></div>
+      <div class="ficha"><div class="ft">💭 Opinião</div>É o que alguém acha; pode mudar de pessoa para pessoa.<div class="ex">"A prova vai ser muito difícil."</div></div>
+      <div class="ficha"><div class="ft">🛡️ Argumento</div>É a prova que usamos para defender uma opinião. Bons argumentos convencem.<div class="ex">"Acho que devemos reciclar, porque assim poluímos menos."</div></div>
+    </div>
+    <div class="postit">📌 <b>Dica de prova:</b> palavras como "acho", "melhor", "pior", "lindo", "chato" quase sempre indicam opinião.</div>
+    <div class="pegadinha">⚠️ <b>Armadilha:</b> uma frase pode parecer fato mas trazer opinião escondida. "Esse é o melhor sorvete da cidade" parece informação, mas "melhor" é opinião!</div>
+    <div class="notas"><label for="n1">📝 Minhas anotações:</label><textarea id="n1" data-nota="1" oninput="nota(1,this.value)"></textarea></div>
+    <label class="estudei"><input type="checkbox" data-est="1" onchange="estudei(1,this.checked)"> ✓ Estudei esta ficha</label>
+  </div>
+
+  <!-- FICHA 2 -->
+  <div class="secao" id="e2">
+    <h2>🔍 Ficha 2 — Descrição objetiva x subjetiva <span class="ref">p. 159</span></h2>
+    <p>Descrever é mostrar como é alguém ou algo, usando <b>adjetivos</b> (palavras de característica). Há dois jeitos:</p>
+    <div class="flips">
+      <div class="flip" onclick="this.classList.toggle('viro')"><div class="flip-in">
+        <div class="flip-face flip-frente"><div class="fc-t">📏 Objetiva</div><div class="fc-d">clique para ver</div></div>
+        <div class="flip-face flip-verso">Mostra só o que dá para observar e conferir, sem opinião. <i>"A bola é redonda e azul."</i></div>
+      </div></div>
+      <div class="flip" onclick="this.classList.toggle('viro')"><div class="flip-in">
+        <div class="flip-face flip-frente"><div class="fc-t">💗 Subjetiva</div><div class="fc-d">clique para ver</div></div>
+        <div class="flip-face flip-verso">Inclui o ponto de vista de quem fala (opinião). <i>"A bola é linda e maravilhosa."</i></div>
+      </div></div>
+    </div>
+    <div class="postit">📌 <b>Pergunta-chave:</b> dá para conferir? Então é objetiva. É só o que a pessoa acha? Então é subjetiva.</div>
+    <div class="pegadinha">⚠️ <b>Armadilha:</b> adjetivos como "alto", "verde", "grande" são objetivos. Já "incrível", "feio", "perfeito" entregam opinião → subjetivos.</div>
+    <div class="notas"><label for="n2">📝 Minhas anotações:</label><textarea id="n2" data-nota="2" oninput="nota(2,this.value)"></textarea></div>
+    <label class="estudei"><input type="checkbox" data-est="2" onchange="estudei(2,this.checked)"> ✓ Estudei esta ficha</label>
+  </div>
+
+  <!-- FICHA 3 -->
+  <div class="secao" id="e3">
+    <h2>🔍 Ficha 3 — O artigo <span class="ref">p. 174</span></h2>
+    <p>O <b>artigo</b> é a palavra que vem <b>antes do substantivo</b>. Ele define o substantivo e mostra o <b>gênero</b> (masculino/feminino) e o <b>número</b> (singular/plural).</p>
+    <table class="tabela">
+      <tr><th>Tipo</th><th>Formas</th><th>Quando usar</th></tr>
+      <tr><td><b>Definido</b></td><td>o, a, os, as</td><td>substantivo já conhecido ou já citado</td></tr>
+      <tr><td><b>Indefinido</b></td><td>um, uma, uns, umas</td><td>substantivo genérico ou que aparece pela 1ª vez</td></tr>
+    </table>
+    <div class="postit">📌 <b>Contrações:</b> o artigo se junta com preposições. de+o=<b>do</b>, em+a=<b>na</b>, a+os=<b>aos</b>, por+o=<b>pelo</b>; em+um=<b>num</b>, de+uma=<b>duma</b>.</div>
+    <div class="pegadinha">⚠️ <b>Curiosidade:</b> o artigo pode transformar outra palavra em substantivo. Em "<b>O</b> jantar está pronto", "o" faz o verbo "jantar" virar substantivo.</div>
+    <div class="notas"><label for="n3">📝 Minhas anotações:</label><textarea id="n3" data-nota="3" oninput="nota(3,this.value)"></textarea></div>
+    <label class="estudei"><input type="checkbox" data-est="3" onchange="estudei(3,this.checked)"> ✓ Estudei esta ficha</label>
+  </div>
+
+  <!-- FICHA 4 -->
+  <div class="secao" id="e4">
+    <h2>🔍 Ficha 4 — Onde x Aonde <span class="ref">p. 195</span></h2>
+    <p>As duas falam de <b>lugar</b>, mas têm uma diferença simples:</p>
+    <div class="flips">
+      <div class="flip" onclick="this.classList.toggle('viro')"><div class="flip-in">
+        <div class="flip-face flip-frente"><div class="fc-t">📍 ONDE</div><div class="fc-d">clique para ver</div></div>
+        <div class="flip-face flip-verso">Lugar <b>parado</b>, fixo. Ideia de estar <b>em</b> um lugar. <i>"Onde você mora?"</i></div>
+      </div></div>
+      <div class="flip" onclick="this.classList.toggle('viro')"><div class="flip-in">
+        <div class="flip-face flip-frente"><div class="fc-t">➡️ AONDE</div><div class="fc-d">clique para ver</div></div>
+        <div class="flip-face flip-verso"><b>Movimento</b>, destino. Vai com ir, chegar, levar. Ideia de ir <b>a</b> um lugar. <i>"Aonde você vai?"</i></div>
+      </div></div>
+    </div>
+    <div class="postit">📌 <b>Macete:</b> "Aonde" tem um "a" a mais — o mesmo "a" de movimento (ir <b>a</b> algum lugar). Sem movimento, é só "onde".</div>
+    <div class="pegadinha">⚠️ <b>Armadilha:</b> "Aonde você está?" está errado! Estar é lugar parado → "Onde você está?".</div>
+    <div class="notas"><label for="n4">📝 Minhas anotações:</label><textarea id="n4" data-nota="4" oninput="nota(4,this.value)"></textarea></div>
+    <label class="estudei"><input type="checkbox" data-est="4" onchange="estudei(4,this.checked)"> ✓ Estudei esta ficha</label>
+  </div>
+
+  <!-- FICHA 5 -->
+  <div class="secao" id="e5">
+    <h2>🔍 Ficha 5 — Pronome e pronomes pessoais <span class="ref">pp. 198–199</span></h2>
+    <p>O <b>pronome</b> acompanha ou substitui o substantivo. Ele pode ser <b>adjetivo</b> (acompanha o nome) ou <b>substantivo</b> (substitui o nome).</p>
+    <div class="cards">
+      <div class="ficha"><div class="ft">👥 Pessoas do discurso</div>1ª = quem fala · 2ª = com quem se fala · 3ª = de quem se fala.</div>
+      <div class="ficha"><div class="ft">🟢 Pronome reto</div>Faz a ação (é o sujeito): eu, tu, ele, nós, vós, eles.<div class="ex">"Eu perguntei o nome."</div></div>
+      <div class="ficha"><div class="ft">🔵 Pronome oblíquo</div>Recebe a ação (é o complemento): me, te, o, a, lhe, mim, comigo...<div class="ex">"Perguntei-lhe o nome."</div></div>
+    </div>
+    <table class="tabela">
+      <tr><th>Pessoa</th><th>Reto</th><th>Oblíquo</th></tr>
+      <tr><td>1ª sing.</td><td>eu</td><td>me, mim, comigo</td></tr>
+      <tr><td>2ª sing.</td><td>tu (você)</td><td>te, ti, contigo</td></tr>
+      <tr><td>3ª sing.</td><td>ele, ela</td><td>o, a, se, lhe</td></tr>
+      <tr><td>1ª plur.</td><td>nós</td><td>nos, conosco</td></tr>
+      <tr><td>2ª plur.</td><td>vós (vocês)</td><td>vos, convosco</td></tr>
+      <tr><td>3ª plur.</td><td>eles, elas</td><td>os, as, se, lhes</td></tr>
+    </table>
+    <div class="postit">📌 <b>Tratamento:</b> "você", "a senhora", "Vossa Excelência" são pronomes de tratamento. Mesmo falando com a pessoa, usam o verbo na 3ª pessoa: "A senhora <b>deseja</b> um café?".</div>
+    <div class="pegadinha">⚠️ <b>Armadilha:</b> reto FAZ a ação; oblíquo RECEBE. "Ele me viu" → "ele" (reto, faz) e "me" (oblíquo, recebe).</div>
+    <div class="notas"><label for="n5">📝 Minhas anotações:</label><textarea id="n5" data-nota="5" oninput="nota(5,this.value)"></textarea></div>
+    <label class="estudei"><input type="checkbox" data-est="5" onchange="estudei(5,this.checked)"> ✓ Estudei esta ficha</label>
+  </div>
+
+  <!-- FICHA 6 -->
+  <div class="secao" id="e6">
+    <h2>🔍 Ficha 6 — Pronomes possessivos <span class="ref">p. 217</span></h2>
+    <p>Mostram uma relação de <b>posse</b> (de quem é a coisa), ligando algo às pessoas do discurso.</p>
+    <table class="tabela">
+      <tr><th>Pessoa</th><th>Singular</th><th>Plural</th></tr>
+      <tr><td>1ª (eu / nós)</td><td>meu, minha</td><td>nosso, nossa</td></tr>
+      <tr><td>2ª (tu / vós)</td><td>teu, tua</td><td>vosso, vossa</td></tr>
+      <tr><td>3ª (ele / eles)</td><td>seu, sua</td><td>seu, sua</td></tr>
+    </table>
+    <div class="postit">📌 <b>Dica:</b> o possessivo combina com a <b>coisa possuída</b>, não com o dono. "A casa é minha" (casa é feminino → minha), mesmo que o dono seja um menino.</div>
+    <div class="pegadinha">⚠️ <b>Lembre:</b> possessivo também pode acompanhar ("o <b>meu</b> tênis" = adjetivo) ou substituir ("perdi o <b>meu</b>" = substantivo).</div>
+    <div class="notas"><label for="n6">📝 Minhas anotações:</label><textarea id="n6" data-nota="6" oninput="nota(6,this.value)"></textarea></div>
+    <label class="estudei"><input type="checkbox" data-est="6" onchange="estudei(6,this.checked)"> ✓ Estudei esta ficha</label>
+  </div>
+
+  <!-- FICHA 7 -->
+  <div class="secao" id="e7">
+    <h2>🔍 Ficha 7 — Pronomes demonstrativos <span class="ref">p. 217</span></h2>
+    <p>Situam os seres no <b>tempo</b> e no <b>espaço</b> em relação às pessoas do discurso. Eles <b>apontam</b> e mostram a distância.</p>
+    <table class="tabela">
+      <tr><th>Pronome</th><th>Espaço</th><th>Tempo</th></tr>
+      <tr><td><b>este, esta, isto</b></td><td>perto de quem fala</td><td>presente</td></tr>
+      <tr><td><b>esse, essa, isso</b></td><td>perto de com quem se fala</td><td>passado recente</td></tr>
+      <tr><td><b>aquele, aquela, aquilo</b></td><td>longe dos dois</td><td>passado distante</td></tr>
+    </table>
+    <div class="postit">📌 <b>Também são demonstrativos:</b> mesmo, próprio, semelhante, tal e "o, a, os, as" quando significam "aquele/aquela" ("Levei <b>os</b> que estavam na mesa").</div>
+    <div class="pegadinha">⚠️ <b>Macete da distância:</b> Est<u>e</u> (perto de mim) → Ess<u>e</u> (perto de você) → Aqu<u>ele</u> (longe dos dois).</div>
+    <div class="notas"><label for="n7">📝 Minhas anotações:</label><textarea id="n7" data-nota="7" oninput="nota(7,this.value)"></textarea></div>
+    <label class="estudei"><input type="checkbox" data-est="7" onchange="estudei(7,this.checked)"> ✓ Estudei esta ficha</label>
+  </div>
+
+  <!-- GLOSSÁRIO -->
+  <div class="secao" id="glo">
+    <h2>📖 Glossário do detetive</h2>
+    <dl class="glossario">
+      <dt>Fato</dt><dd>Algo que aconteceu de verdade e pode ser conferido por qualquer pessoa.</dd>
+      <dt>Opinião</dt><dd>Ponto de vista pessoal de alguém sobre um fato.</dd>
+      <dt>Argumento</dt><dd>Prova ou razão usada para defender uma opinião.</dd>
+      <dt>Descrição objetiva</dt><dd>Mostra só as características observáveis, sem opinião.</dd>
+      <dt>Descrição subjetiva</dt><dd>Inclui o ponto de vista (opinião) de quem descreve.</dd>
+      <dt>Artigo</dt><dd>Palavra que vem antes do substantivo e mostra gênero e número (o, a, um, uma...).</dd>
+      <dt>Pronome substantivo</dt><dd>Pronome que substitui o nome (o substantivo não aparece).</dd>
+      <dt>Pronome adjetivo</dt><dd>Pronome que acompanha o nome (o substantivo aparece junto).</dd>
+      <dt>Pronome reto</dt><dd>Pronome pessoal que faz a ação / é o sujeito (eu, tu, ele...).</dd>
+      <dt>Pronome oblíquo</dt><dd>Pronome pessoal que recebe a ação / é o complemento (me, te, lhe...).</dd>
+      <dt>Pronome de tratamento</dt><dd>Forma de tratar alguém (você, a senhora, Vossa Excelência); usa verbo na 3ª pessoa.</dd>
+    </dl>
+  </div>
+
+  <div class="rodape">🗂️ Caso encerrado = prova dominada. Vá com confiança, detetive das palavras!</div>
+</div>
+
+<script>
+const CHAVE='port6_detetives_resumo_v1';
+let estado=JSON.parse(localStorage.getItem(CHAVE)||'null')||{notas:{},estudei:{}};
+function salvar(){estado.ts=new Date().toLocaleString('pt-BR');localStorage.setItem(CHAVE,JSON.stringify(estado));document.getElementById('salvoInfo').textContent='💾 Salvo · último: '+estado.ts;}
+function nota(i,v){estado.notas[i]=v;salvar();}
+function estudei(i,c){estado.estudei[i]=c;salvar();}
+function carregar(){
+  for(const i in estado.notas){const el=document.querySelector('[data-nota="'+i+'"]');if(el)el.value=estado.notas[i];}
+  for(const i in estado.estudei){const el=document.querySelector('[data-est="'+i+'"]');if(el)el.checked=estado.estudei[i];}
+  if(estado.ts)document.getElementById('salvoInfo').textContent='💾 Salvo · último: '+estado.ts;
+}
+function exportar(){const b=new Blob([JSON.stringify(estado,null,2)],{type:'application/json'});const a=document.createElement('a');a.href=URL.createObjectURL(b);a.download='resumo_portugues6_progresso.json';a.click();}
+function importar(e){const f=e.target.files[0];if(!f)return;const r=new FileReader();r.onload=ev=>{try{estado=JSON.parse(ev.target.result);salvar();carregar();alert('Progresso importado! 🎉');}catch(_){alert('Arquivo inválido.');}};r.readAsText(f);}
+function zerar(){if(confirm('Apagar anotações e marcações deste resumo?')){estado={notas:{},estudei:{}};localStorage.removeItem(CHAVE);document.querySelectorAll('[data-nota]').forEach(t=>t.value='');document.querySelectorAll('[data-est]').forEach(c=>c.checked=false);document.getElementById('salvoInfo').textContent='💾 Progresso salvo sozinho neste navegador.';}}
+carregar();
+</script>
+</body>
+</html>

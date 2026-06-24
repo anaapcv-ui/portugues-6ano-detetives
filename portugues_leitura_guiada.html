@@ -1,0 +1,384 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>🔍 Leitura Guiada — Detetives das Palavras | Português 6º ano</title>
+<style>
+  :root{
+    --det:#4f46e5; --det-esc:#3730a3; --det-claro:#c7d2fe;
+    --ouro:#f59e0b; --ouro-claro:#fde68a;
+    --pista:#e11d48; --pista-claro:#fecdd3;
+    --tinta:#312e81; --tinta2:#5b5b8a; --papel:#f6f1e4; --branco:#ffffff;
+    --verde-ok:#16a34a;
+  }
+  *{box-sizing:border-box;margin:0;padding:0;}
+  body{font-family:'Segoe UI',Tahoma,sans-serif;background:var(--papel);color:var(--tinta);line-height:1.6;padding:16px;font-size:17px;}
+  .container{max-width:840px;margin:0 auto;}
+
+  .topo{background:linear-gradient(135deg,#4f46e5,#3730a3 60%,#1e1b4b);border-radius:18px;padding:30px 26px;color:#fff;text-align:center;box-shadow:0 8px 24px rgba(55,48,163,.3);margin-bottom:18px;position:relative;overflow:hidden;}
+  .topo::after{content:"🔍🕵️🗂️";position:absolute;right:14px;top:8px;font-size:1.4em;opacity:.35;}
+  .topo h1{font-size:1.6em;margin-bottom:6px;}
+  .topo .sub{opacity:.95;font-size:1.02em;}
+  .topo .narr{margin-top:12px;font-style:italic;font-size:.95em;border-top:1px dashed rgba(255,255,255,.4);padding-top:10px;color:#e0e7ff;}
+
+  .painel{background:var(--branco);border:1.5px solid var(--det-claro);border-radius:12px;padding:12px 16px;margin-bottom:16px;display:flex;flex-wrap:wrap;gap:8px;align-items:center;justify-content:space-between;}
+  .painel .salvo{font-size:.85em;color:var(--tinta2);}
+  .painel .botoes{display:flex;gap:6px;flex-wrap:wrap;}
+  .painel button{border:none;border-radius:8px;padding:7px 12px;font-size:.82em;font-weight:700;cursor:pointer;color:#fff;}
+  .b-exp{background:var(--det);} .b-imp{background:var(--ouro);} .b-zerar{background:var(--pista);}
+
+  .barra-geral{background:var(--branco);border:1.5px solid var(--det-claro);border-radius:12px;padding:12px 16px;margin-bottom:18px;}
+  .barra-geral .lab{font-size:.9em;font-weight:700;color:var(--det-esc);margin-bottom:6px;display:flex;justify-content:space-between;}
+  .barra-track{height:14px;background:#e0e7ff;border-radius:8px;overflow:hidden;}
+  .barra-fill{height:100%;background:linear-gradient(90deg,var(--det),var(--ouro));width:0;transition:width .4s;}
+
+  .bloco{background:var(--branco);border:2px solid #d8d4c4;border-radius:16px;margin-bottom:18px;overflow:hidden;box-shadow:0 3px 10px rgba(0,0,0,.05);}
+  .bloco.bloqueado{opacity:.55;}
+  .bloco-cab{background:linear-gradient(135deg,#3730a3,#4f46e5);color:#fff;padding:14px 20px;display:flex;align-items:center;gap:12px;cursor:pointer;}
+  .bloco-cab .nb{background:rgba(255,255,255,.25);width:34px;height:34px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-weight:900;flex-shrink:0;}
+  .bloco-cab .tit{flex:1;font-weight:800;font-size:1.08em;}
+  .bloco-cab .estado{font-size:1.3em;}
+  .bloco-corpo{padding:20px;display:none;}
+  .bloco.aberto .bloco-corpo{display:block;}
+  .bloco-corpo h3{color:var(--det-esc);margin:16px 0 8px;font-size:1.05em;}
+  .bloco-corpo p{margin-bottom:10px;}
+  .bloco-corpo .destaque{background:var(--ouro-claro);border-left:4px solid var(--ouro);padding:8px 12px;border-radius:6px;margin:10px 0;}
+  .bloco-corpo .exemplo{background:#eef2ff;border:1px solid var(--det-claro);border-radius:8px;padding:8px 12px;margin:8px 0;font-style:italic;}
+  b,strong{color:var(--det-esc);}
+
+  .pergunta{margin-top:16px;background:#fffbeb;border:1.5px solid var(--ouro-claro);border-radius:10px;padding:12px 14px;}
+  .pergunta .pq{font-weight:700;color:var(--tinta);margin-bottom:8px;}
+  .pergunta textarea{width:100%;min-height:64px;border:1.5px solid #d8d4c4;border-radius:8px;padding:8px;font-family:inherit;font-size:.95em;resize:vertical;}
+  .pergunta textarea.ok{border-color:var(--verde-ok);background:#f0fdf4;}
+
+  .modelo{display:none;margin-top:10px;background:#eef2ff;border:1.5px solid var(--det-claro);border-radius:8px;padding:10px 12px;font-size:.93em;}
+  .modelo.mostra{display:block;}
+  .modelo .mt{font-weight:800;color:var(--det-esc);margin-bottom:4px;}
+
+  .acao-bloco{margin-top:16px;display:flex;flex-direction:column;gap:10px;}
+  .btn-conferir{background:var(--det);color:#fff;border:none;border-radius:10px;padding:12px;font-size:1em;font-weight:800;cursor:pointer;opacity:.5;}
+  .btn-conferir.ativo{opacity:1;}
+  .autoaval{display:none;gap:8px;flex-wrap:wrap;}
+  .autoaval.mostra{display:flex;}
+  .autoaval span{font-weight:700;align-self:center;color:var(--tinta2);}
+  .autoaval button{border:2px solid;border-radius:10px;padding:9px 14px;font-weight:700;cursor:pointer;background:#fff;}
+  .btn-acertei{border-color:var(--verde-ok);color:var(--verde-ok);}
+  .btn-acertei.sel{background:var(--verde-ok);color:#fff;}
+  .btn-revisar{border-color:var(--ouro);color:#b45309;}
+  .btn-revisar.sel{background:var(--ouro);color:#fff;}
+
+  .final{background:#fff1f2;border:2.5px solid var(--pista);border-radius:16px;padding:22px;margin-bottom:18px;display:none;}
+  .final.mostra{display:block;}
+  .final h2{color:var(--pista);margin-bottom:12px;}
+  .final ol{margin-left:20px;}
+  .final li{margin-bottom:9px;}
+  .resumo-auto{background:var(--branco);border:2px solid var(--det-claro);border-radius:16px;padding:20px;margin-bottom:18px;display:none;}
+  .resumo-auto.mostra{display:block;}
+  .resumo-auto h2{color:var(--det-esc);margin-bottom:10px;}
+  .placar{display:flex;gap:14px;flex-wrap:wrap;margin-top:10px;}
+  .placar div{flex:1;min-width:120px;text-align:center;background:#eef2ff;border-radius:10px;padding:12px;}
+  .placar .n{font-size:1.8em;font-weight:900;color:var(--det-esc);}
+  .rodape{text-align:center;color:var(--det-esc);font-style:italic;padding:16px;}
+  @media(max-width:600px){.topo h1{font-size:1.3em;}}
+</style>
+</head>
+<body>
+<div class="container">
+
+  <div class="topo">
+    <h1>🔍 Leitura Guiada — Detetives das Palavras</h1>
+    <div class="sub">Português · 6º ano · Colégio Coração Feliz</div>
+    <div class="narr">Bem-vindo(a), jovem detetive! Cada palavra de uma frase tem um papel — algumas dão pistas (fatos), outras dão opiniões; umas apresentam, outras apontam, outras mostram quem é o dono. Sua missão é investigar cada caso. Avance uma missão de cada vez: a próxima só abre quando você termina a anterior. 🕵️</div>
+  </div>
+
+  <div class="painel">
+    <div class="salvo" id="salvoInfo">💾 Seu progresso é salvo sozinho neste navegador.</div>
+    <div class="botoes">
+      <button class="b-exp" onclick="exportar()">📥 Exportar</button>
+      <button class="b-imp" onclick="document.getElementById('arq').click()">📤 Importar</button>
+      <button class="b-zerar" onclick="zerar()">🗑️ Zerar</button>
+      <input type="file" id="arq" accept=".json" style="display:none" onchange="importar(event)">
+    </div>
+  </div>
+
+  <div class="barra-geral">
+    <div class="lab"><span>🧭 Sua investigação</span><span id="progTxt">0 de 8 missões</span></div>
+    <div class="barra-track"><div class="barra-fill" id="progFill"></div></div>
+  </div>
+
+  <div id="blocos"></div>
+
+  <div class="final" id="boxPegadinhas">
+    <h2>⚠️ As 10 armadilhas que mais pegam na prova</h2>
+    <ol>
+      <li><b>Fato não é opinião.</b> Fato é o que aconteceu de verdade e qualquer um pode conferir. Opinião é o que alguém acha. "Choveu hoje" (fato) ≠ "Foi um dia horrível" (opinião).</li>
+      <li><b>Adjetivo pode entregar opinião.</b> Palavras como "lindo", "horrível", "incrível" mostram um ponto de vista. Descrição com esse tipo de palavra é subjetiva.</li>
+      <li><b>Artigo definido x indefinido.</b> "O cachorro" = um cachorro que já conhecemos (definido). "Um cachorro" = qualquer um, apareceu agora (indefinido).</li>
+      <li><b>Artigo vem antes do substantivo</b> e combina em gênero e número: o, a, os, as / um, uma, uns, umas.</li>
+      <li><b>Onde x Aonde.</b> "Onde" é lugar parado ("Onde você mora?"). "Aonde" tem movimento, vai com verbos como ir e chegar ("Aonde você vai?").</li>
+      <li><b>Pronome substantivo x adjetivo.</b> Se ele <u>substitui</u> o nome, é substantivo ("Esqueci o <b>meu</b>"). Se ele <u>acompanha</u> o nome, é adjetivo ("o <b>meu</b> livro").</li>
+      <li><b>Pessoas do discurso:</b> 1ª = quem fala, 2ª = com quem se fala, 3ª = de quem (ou do que) se fala.</li>
+      <li><b>Pronome reto x oblíquo.</b> Reto faz a ação / é o sujeito (eu, tu, ele). Oblíquo recebe a ação / é o complemento (me, te, o, a, lhe, mim, comigo).</li>
+      <li><b>Pronome de tratamento é da 3ª pessoa.</b> "Você", "a senhora", "Vossa Excelência" usam o verbo na 3ª pessoa: "A senhora <b>quer</b> um café?" (não "queres").</li>
+      <li><b>Demonstrativos marcam distância.</b> Este/isto (perto de quem fala), esse/isso (perto de quem ouve), aquele/aquilo (longe dos dois).</li>
+    </ol>
+  </div>
+
+  <div class="resumo-auto" id="boxResumo">
+    <h2>📊 Seu relatório de detetive</h2>
+    <p>Você terminou todas as missões! Veja como se saiu:</p>
+    <div class="placar">
+      <div><div class="n" id="plAcertei">0</div>Marquei "Resolvi!"</div>
+      <div><div class="n" id="plRevisar">0</div>Marquei "Preciso revisar"</div>
+    </div>
+    <p style="margin-top:12px" id="dicaFinal"></p>
+  </div>
+
+  <div class="rodape">🔍 Cada caso resolvido te deixa mais perto da prova. Boa sorte, detetive das palavras!</div>
+</div>
+
+<script>
+const CHAVE='port6_detetives_leituraguiada_v1';
+
+const BLOCOS=[
+ {
+  titulo:"Fato ou opinião?",
+  corpo:`<p>O primeiro caso de todo detetive das palavras é descobrir se uma frase conta um <b>fato</b> ou uma <b>opinião</b>. Os dois parecem iguais, mas são bem diferentes!</p>
+  <p>Um <b>fato</b> é o retrato do que aconteceu de verdade. Ele <b>não depende</b> de quem está contando: qualquer pessoa pode conferir se é verdade. Já uma <b>opinião</b> é um ponto de vista pessoal sobre um fato — é o que alguém pensa ou sente, e pode mudar de pessoa para pessoa.</p>
+  <div class="exemplo">Fato: "O jogo terminou 2 a 1." (dá para conferir no placar)<br>Opinião: "O jogo foi chato." (é só o que a pessoa achou)</div>
+  <div class="destaque">💡 Pista de detetive: se você consegue provar ou conferir, é fato. Se é só o que alguém acha (bom, ruim, lindo, feio), é opinião.</div>`,
+  perguntas:[
+   {q:"Com suas palavras, qual é a diferença entre um fato e uma opinião?",m:"Fato é algo que aconteceu de verdade e que qualquer pessoa pode conferir; ele não depende de quem conta. Opinião é o ponto de vista pessoal de alguém sobre um fato — é o que a pessoa acha, e pode mudar de pessoa para pessoa."},
+   {q:"Classifique como FATO ou OPINIÃO: 'A escola tem 600 alunos.'",m:"É um FATO. Dá para conferir o número de alunos; não depende de quem está falando."},
+   {q:"Classifique como FATO ou OPINIÃO: 'A merenda da escola é deliciosa.' Explique.",m:"É uma OPINIÃO. 'Deliciosa' mostra o gosto pessoal de quem fala; outra pessoa pode achar diferente."}
+  ]
+ },
+ {
+  titulo:"Descrição objetiva e subjetiva",
+  corpo:`<p>Quando descrevemos alguém ou alguma coisa, podemos fazer isso de dois jeitos. É outro caso para o detetive resolver, olhando bem os <b>adjetivos</b> (as palavras que dão características).</p>
+  <p>Na <b>descrição objetiva</b>, mostramos só as características próprias do objeto: aquilo que dá para observar e que todo mundo concorda. É como um fato.</p>
+  <p>Na <b>descrição subjetiva</b>, a pessoa coloca o seu ponto de vista, a sua opinião. Aparecem palavras que mostram gosto ou sentimento.</p>
+  <div class="exemplo">Objetiva: "A casa é branca e tem dois andares." (dá para conferir)<br>Subjetiva: "A casa é aconchegante e charmosa." (é o que a pessoa achou)</div>
+  <div class="destaque">💡 Pista: adjetivos como alto, azul, redondo são objetivos. Adjetivos como lindo, horrível, maravilhoso entregam opinião — são subjetivos.</div>`,
+  perguntas:[
+   {q:"O que é uma descrição objetiva?",m:"É a descrição que mostra apenas as características próprias do objeto, aquelas que dá para observar e conferir, sem opinião. Ex.: 'A mesa é de madeira e tem quatro pernas.'"},
+   {q:"Por que a frase 'O parque é maravilhoso e divertido' é uma descrição subjetiva?",m:"Porque 'maravilhoso' e 'divertido' mostram o ponto de vista (a opinião) de quem fala. Outra pessoa pode achar o parque chato. Por incluir opinião, a descrição é subjetiva."},
+   {q:"Transforme em descrição objetiva: 'Aquele cachorro é o mais fofo do mundo.'",m:"Posso dizer, por exemplo: 'Aquele cachorro é pequeno, tem pelo branco e orelhas caídas.' Agora só há características que dá para observar, sem opinião."}
+  ]
+ },
+ {
+  titulo:"O artigo: definido e indefinido",
+  corpo:`<p>Agora o detetive investiga uma palavrinha que vive <b>antes do substantivo</b>: o <b>artigo</b>. Os artigos são palavras variáveis que ajudam a definir o substantivo e mostram o seu <b>gênero</b> (masculino/feminino) e <b>número</b> (singular/plural).</p>
+  <h3>Artigo definido: o, a, os, as</h3>
+  <p>Usamos quando o substantivo já é <b>conhecido</b> — porque já foi citado, já foi explicado ou todo mundo sabe de quem se trata.</p>
+  <div class="exemplo">"<b>O</b> trabalho infantil é crime." (falamos de um trabalho específico, já conhecido)</div>
+  <h3>Artigo indefinido: um, uma, uns, umas</h3>
+  <p>Usamos quando o substantivo é <b>genérico</b> ou aparece pela <b>primeira vez</b> no texto, sem precisar qual exatamente.</p>
+  <div class="exemplo">"Vi <b>um</b> cachorro na rua." (qualquer cachorro, apareceu agora)</div>
+  <div class="destaque">💡 Pista: artigo também pode "transformar" outra palavra em substantivo. Em "O fiscalizar é dever de todos", o artigo "o" faz o verbo "fiscalizar" virar substantivo.</div>`,
+  perguntas:[
+   {q:"O que é um artigo e onde ele aparece na frase?",m:"O artigo é uma palavra variável que vem antes do substantivo. Ele ajuda a definir o substantivo e mostra o gênero (masculino ou feminino) e o número (singular ou plural). Ex.: o, a, os, as, um, uma, uns, umas."},
+   {q:"Qual a diferença entre o artigo definido e o indefinido?",m:"O definido (o, a, os, as) acompanha um substantivo já conhecido ou já citado. O indefinido (um, uma, uns, umas) acompanha um substantivo genérico ou que aparece pela primeira vez."},
+   {q:"Na piada 'Um moleque liga para a padaria... O moleque pergunta...', por que primeiro usamos 'um' e depois 'o'?",m:"Na primeira vez o moleque aparece pela primeira vez, então usamos o artigo indefinido 'um'. Depois ele já é conhecido na história, então usamos o artigo definido 'o'."}
+  ]
+ },
+ {
+  titulo:"Onde ou Aonde?",
+  corpo:`<p>Esse é um caso clássico que confunde muita gente! As duas palavrinhas falam de <b>lugar</b>, mas têm um detalhe importante.</p>
+  <h3>ONDE</h3>
+  <p>Usamos "onde" para indicar um <b>lugar parado</b>, fixo. Combina com a ideia de <b>estar em</b> algum lugar.</p>
+  <div class="exemplo">"<b>Onde</b> você está?" / "<b>Onde</b> você mora?" (lugar onde a pessoa está, sem movimento)</div>
+  <h3>AONDE</h3>
+  <p>Usamos "aonde" quando há <b>movimento</b>, um destino. Ele aparece com verbos de movimento, como <b>ir, chegar, levar</b>. Combina com a ideia de ir <b>a</b> algum lugar.</p>
+  <div class="exemplo">"<b>Aonde</b> você vai?" / "<b>Aonde</b> esse caminho leva?" (tem destino, movimento)</div>
+  <div class="destaque">💡 Pista de detetive: "Aonde" tem um "a" a mais, igual ao "a" de movimento (ir <b>a</b> algum lugar). Sem movimento, é só "onde".</div>`,
+  perguntas:[
+   {q:"Quando usamos 'onde' e quando usamos 'aonde'?",m:"Usamos 'onde' para lugar parado, fixo, com a ideia de estar em algum lugar. Usamos 'aonde' quando há movimento ou destino, com verbos como ir e chegar (ir a algum lugar)."},
+   {q:"Complete e explique: '______ fica a sua casa?'",m:"'ONDE fica a sua casa?' A casa está parada num lugar, não há movimento. Por isso usamos 'onde'."},
+   {q:"Complete e explique: '______ vocês vão depois da aula?'",m:"'AONDE vocês vão depois da aula?' O verbo 'ir' indica movimento, destino. Por isso usamos 'aonde'."}
+  ]
+ },
+ {
+  titulo:"O que é pronome? (substantivo x adjetivo)",
+  corpo:`<p>Os <b>pronomes</b> são palavras que <b>acompanham</b> ou <b>substituem</b> um substantivo. Eles ajudam o texto a não ficar repetitivo e podem variar em gênero e número. Existem dois jeitos de o pronome aparecer:</p>
+  <h3>Pronome substantivo</h3>
+  <p>Quando o pronome <b>substitui</b> o nome (o substantivo não aparece na frase).</p>
+  <div class="exemplo">"Vi que <b>ela</b> estava chorando." → "ela" substitui o nome de uma pessoa.</div>
+  <h3>Pronome adjetivo</h3>
+  <p>Quando o pronome <b>acompanha</b> o nome (o substantivo aparece junto).</p>
+  <div class="exemplo">"<b>Esta</b> lágrima é igual a qualquer outra." → "esta" acompanha o substantivo "lágrima".</div>
+  <div class="destaque">💡 Pista: se o nome SUMIU e o pronome ficou no lugar → substantivo. Se o nome APARECE do lado do pronome → adjetivo.</div>`,
+  perguntas:[
+   {q:"O que são pronomes e para que servem?",m:"Pronomes são palavras que acompanham ou substituem um substantivo. Eles servem para o texto não ficar repetitivo e podem variar em gênero e número."},
+   {q:"Qual a diferença entre pronome substantivo e pronome adjetivo?",m:"O pronome substantivo substitui o nome (o substantivo não aparece). O pronome adjetivo acompanha o nome (o substantivo aparece do lado). Ex.: 'Pode me emprestar o seu?' (substantivo) / 'Pode me emprestar o seu livro?' (adjetivo)."},
+   {q:"Na frase 'Comprei este caderno', a palavra 'este' é pronome substantivo ou adjetivo? Por quê?",m:"É pronome adjetivo, porque acompanha o substantivo 'caderno', que aparece na frase. Se a frase fosse só 'Comprei este', aí 'este' seria substantivo."}
+  ]
+ },
+ {
+  titulo:"Pessoas do discurso e pronomes pessoais",
+  corpo:`<p>Para haver comunicação, é preciso uma situação em que as pessoas conversem. São as <b>pessoas do discurso</b>:</p>
+  <p>👉 <b>1ª pessoa</b> — quem fala (o locutor): eu, nós.<br>👉 <b>2ª pessoa</b> — com quem se fala (o interlocutor): tu, vós.<br>👉 <b>3ª pessoa</b> — de quem (ou do que) se fala: ele, ela, eles, elas.</p>
+  <p>Os <b>pronomes pessoais</b> indicam essas três pessoas. Eles têm dois tipos:</p>
+  <h3>Caso reto</h3>
+  <p>É o pronome que <b>faz a ação</b> (é o sujeito da frase): eu, tu, ele, ela, nós, vós, eles, elas.</p>
+  <div class="exemplo">"<b>Eu</b> perguntei o nome da moça." (quem pergunta = eu = sujeito)</div>
+  <h3>Caso oblíquo</h3>
+  <p>É o pronome que <b>recebe a ação</b> (é o complemento da frase): me, te, o, a, se, lhe, nos, vos, mim, comigo, ti, contigo...</p>
+  <div class="exemplo">"Perguntei-<b>lhe</b> o nome." (quem recebe a pergunta = lhe)</div>
+  <div class="destaque">💡 Pista: o pronome <b>reto</b> faz; o pronome <b>oblíquo</b> recebe. Existem também os <b>pronomes de tratamento</b> (você, a senhora, Vossa Excelência), usados sempre com o verbo na 3ª pessoa: "A senhora <b>deseja</b> um café?".</div>`,
+  perguntas:[
+   {q:"Quais são as três pessoas do discurso?",m:"1ª pessoa = quem fala (o locutor): eu, nós. 2ª pessoa = com quem se fala (o interlocutor): tu, vós. 3ª pessoa = de quem ou do que se fala: ele, ela, eles, elas."},
+   {q:"Qual a diferença entre pronome pessoal do caso reto e do caso oblíquo?",m:"O caso reto faz a ação e funciona como sujeito (eu, tu, ele, nós...). O caso oblíquo recebe a ação e funciona como complemento (me, te, o, a, lhe, mim, comigo...)."},
+   {q:"Por que dizemos 'A senhora quer um café?' e não 'A senhora queres um café?'?",m:"Porque 'a senhora' é um pronome de tratamento. Mesmo falando com a pessoa (2ª pessoa), ele é usado com o verbo na 3ª pessoa: 'quer'."}
+  ]
+ },
+ {
+  titulo:"Pronomes possessivos",
+  corpo:`<p>Os <b>pronomes possessivos</b> mostram uma relação de <b>posse</b>: de quem é a coisa. Eles ligam algo a uma das pessoas do discurso.</p>
+  <p>São eles: <b>meu, minha, meus, minhas</b> (1ª pessoa) · <b>teu, tua, teus, tuas</b> (2ª pessoa) · <b>seu, sua, seus, suas</b> (3ª pessoa) · <b>nosso(s), nossa(s)</b> · <b>vosso(s), vossa(s)</b>.</p>
+  <p>Igual aos outros pronomes, eles podem aparecer de dois jeitos:</p>
+  <div class="exemplo">"Pode me emprestar <b>seu</b> livro?" → acompanha "livro" = pronome adjetivo.<br>"Esqueci de trazer o <b>meu</b>." → substitui "livro" = pronome substantivo.</div>
+  <div class="destaque">💡 Pista: o possessivo combina com a coisa possuída, não com o dono. "A casa é minha" (casa é feminino → minha), mesmo que o dono seja um menino.</div>`,
+  perguntas:[
+   {q:"O que os pronomes possessivos mostram?",m:"Eles mostram uma relação de posse: de quem é a coisa. Ligam algo a uma das pessoas do discurso (meu, teu, seu, nosso, vosso...)."},
+   {q:"Na frase 'Adoro a minha bicicleta', o pronome 'minha' é substantivo ou adjetivo?",m:"É pronome adjetivo, porque acompanha o substantivo 'bicicleta', que aparece na frase."},
+   {q:"Complete com um possessivo e diga a quem se refere: 'Eu trouxe o ______ caderno.'",m:"'Eu trouxe o MEU caderno.' O possessivo 'meu' se refere à 1ª pessoa (eu), mostrando que o caderno é de quem fala."}
+  ]
+ },
+ {
+  titulo:"Pronomes demonstrativos",
+  corpo:`<p>O último caso! Os <b>pronomes demonstrativos</b> situam os seres e objetos no <b>tempo</b> e no <b>espaço</b>, em relação às pessoas do discurso. Em outras palavras, eles <b>apontam</b> e mostram a distância.</p>
+  <p>👉 <b>Este, esta, isto</b> → perto de <b>quem fala</b> (e tempo presente).<br>👉 <b>Esse, essa, isso</b> → perto de <b>com quem se fala</b> (e passado recente).<br>👉 <b>Aquele, aquela, aquilo</b> → <b>longe</b> dos dois (e passado distante).</p>
+  <div class="exemplo">"<b>Este</b> lápis na minha mão é novo." (perto de mim)<br>"<b>Esse</b> caderno aí com você é bonito." (perto de você)<br>"<b>Aquele</b> prédio lá longe é antigo." (longe dos dois)</div>
+  <div class="destaque">💡 Pista: também funcionam como demonstrativos: <b>mesmo, próprio, semelhante, tal</b> e <b>o, a, os, as</b> quando significam "aquele, aquela" (ex.: "Levei os que estavam na mesa").</div>`,
+  perguntas:[
+   {q:"O que os pronomes demonstrativos fazem?",m:"Eles situam os seres e objetos no tempo e no espaço em relação às pessoas do discurso. Ou seja, apontam e mostram a distância (perto de quem fala, perto de quem ouve ou longe dos dois)."},
+   {q:"Qual demonstrativo usamos para algo que está perto de quem fala? E para algo longe dos dois?",m:"Perto de quem fala: este, esta, isto. Longe dos dois: aquele, aquela, aquilo."},
+   {q:"Complete: 'Pode me passar ______ caneta que está perto de você?'",m:"'Pode me passar ESSA caneta que está perto de você?' Usamos 'essa' porque o objeto está perto de quem ouve (com quem se fala)."}
+  ]
+ }
+];
+
+let estado=JSON.parse(localStorage.getItem(CHAVE)||'null')||{respostas:{},conferido:{},auto:{},abertos:{}};
+
+function salvar(){
+  estado.ts=new Date().toLocaleString('pt-BR');
+  localStorage.setItem(CHAVE,JSON.stringify(estado));
+  document.getElementById('salvoInfo').textContent='💾 Salvo sozinho · último: '+estado.ts;
+}
+
+function render(){
+  const cont=document.getElementById('blocos');
+  cont.innerHTML='';
+  BLOCOS.forEach((b,i)=>{
+    const desbloqueado = i===0 || estado.conferido[i-1];
+    const aberto = estado.abertos[i] && desbloqueado;
+    const div=document.createElement('div');
+    div.className='bloco'+(aberto?' aberto':'')+(desbloqueado?'':' bloqueado');
+    let perg='';
+    b.perguntas.forEach((p,j)=>{
+      const val=(estado.respostas[i]&&estado.respostas[i][j])||'';
+      const okcls=val.trim().length>=3?'ok':'';
+      perg+=`<div class="pergunta">
+        <div class="pq">${j+1}) ${p.q}</div>
+        <textarea data-b="${i}" data-p="${j}" class="${okcls}" oninput="resp(${i},${j},this.value)" ${estado.conferido[i]?'disabled':''}>${val.replace(/</g,'&lt;')}</textarea>
+        <div class="modelo ${estado.conferido[i]?'mostra':''}" id="m${i}_${j}"><div class="mt">✅ Resposta-modelo</div>${p.m}</div>
+      </div>`;
+    });
+    const auto=estado.auto[i];
+    div.innerHTML=`
+      <div class="bloco-cab" onclick="toggle(${i},${desbloqueado})">
+        <div class="nb">${desbloqueado?(i+1):'🔒'}</div>
+        <div class="tit">Missão ${i+1} — ${b.titulo}</div>
+        <div class="estado">${estado.conferido[i]?'✅':(desbloqueado?'▾':'🔒')}</div>
+      </div>
+      <div class="bloco-corpo">
+        ${b.corpo}
+        ${perg}
+        <div class="acao-bloco">
+          <button class="btn-conferir" id="conf${i}" onclick="conferir(${i})">🔎 Conferir respostas</button>
+          <div class="autoaval ${estado.conferido[i]?'mostra':''}" id="aa${i}">
+            <span>Como você se saiu nesta missão?</span>
+            <button class="btn-acertei ${auto==='acertei'?'sel':''}" onclick="marcar(${i},'acertei')">😀 Resolvi!</button>
+            <button class="btn-revisar ${auto==='revisar'?'sel':''}" onclick="marcar(${i},'revisar')">📌 Preciso revisar</button>
+          </div>
+        </div>
+      </div>`;
+    cont.appendChild(div);
+    if(aberto) setTimeout(()=>checarBotao(i),0);
+  });
+  atualizarProgresso();
+}
+
+function toggle(i,desbloqueado){
+  if(!desbloqueado) return;
+  estado.abertos[i]=!estado.abertos[i];
+  salvar(); render();
+}
+function resp(i,j,v){
+  estado.respostas[i]=estado.respostas[i]||{};
+  estado.respostas[i][j]=v;
+  const ta=document.querySelector(`textarea[data-b="${i}"][data-p="${j}"]`);
+  if(ta) ta.className=v.trim().length>=3?'ok':'';
+  checarBotao(i); salvar();
+}
+function checarBotao(i){
+  const btn=document.getElementById('conf'+i); if(!btn) return;
+  const rs=estado.respostas[i]||{};
+  let ok=true;
+  for(let j=0;j<BLOCOS[i].perguntas.length;j++){ if(!rs[j]||rs[j].trim().length<3) ok=false; }
+  btn.classList.toggle('ativo',ok);
+}
+function conferir(i){
+  const rs=estado.respostas[i]||{};
+  for(let j=0;j<BLOCOS[i].perguntas.length;j++){ if(!rs[j]||rs[j].trim().length<3){ alert('Responda todas as perguntas (mínimo 3 letras) antes de conferir.'); return; } }
+  estado.conferido[i]=true;
+  estado.abertos[i]=true;
+  salvar(); render();
+  setTimeout(()=>{const el=document.getElementById('aa'+i); if(el) el.scrollIntoView({behavior:'smooth',block:'center'});},80);
+}
+function marcar(i,tipo){
+  estado.auto[i]=tipo; salvar(); render();
+}
+function atualizarProgresso(){
+  const n=BLOCOS.filter((_,i)=>estado.conferido[i]).length;
+  document.getElementById('progTxt').textContent=n+' de '+BLOCOS.length+' missões';
+  document.getElementById('progFill').style.width=(n/BLOCOS.length*100)+'%';
+  const todos=n===BLOCOS.length;
+  document.getElementById('boxPegadinhas').classList.toggle('mostra',todos);
+  document.getElementById('boxResumo').classList.toggle('mostra',todos);
+  if(todos){
+    const a=BLOCOS.filter((_,i)=>estado.auto[i]==='acertei').length;
+    const r=BLOCOS.filter((_,i)=>estado.auto[i]==='revisar').length;
+    document.getElementById('plAcertei').textContent=a;
+    document.getElementById('plRevisar').textContent=r;
+    document.getElementById('dicaFinal').innerHTML = r===0
+      ? '🏆 Você marcou "Resolvi!" em tudo! Dê uma última olhada nas 10 armadilhas acima e está pronta para a prova.'
+      : '📌 Você marcou <b>'+r+'</b> missão(ões) como "Preciso revisar". Volte a essas missões e ao Resumo antes da prova — foque nelas!';
+  }
+}
+function exportar(){
+  const blob=new Blob([JSON.stringify(estado,null,2)],{type:'application/json'});
+  const a=document.createElement('a'); a.href=URL.createObjectURL(blob);
+  a.download='leitura_guiada_portugues6_progresso.json'; a.click();
+}
+function importar(e){
+  const f=e.target.files[0]; if(!f) return;
+  const r=new FileReader();
+  r.onload=ev=>{ try{ estado=JSON.parse(ev.target.result); salvar(); render(); alert('Progresso importado! 🎉'); }catch(_){ alert('Arquivo inválido.'); } };
+  r.readAsText(f);
+}
+function zerar(){
+  if(confirm('Apagar TODO o progresso desta leitura guiada? (Para outra criança usar)')){
+    estado={respostas:{},conferido:{},auto:{},abertos:{}};
+    localStorage.removeItem(CHAVE); render();
+    document.getElementById('salvoInfo').textContent='💾 Seu progresso é salvo sozinho neste navegador.';
+  }
+}
+if(estado.ts) document.getElementById('salvoInfo').textContent='💾 Salvo sozinho · último: '+estado.ts;
+if(Object.keys(estado.abertos).length===0) estado.abertos[0]=true;
+render();
+</script>
+</body>
+</html>
